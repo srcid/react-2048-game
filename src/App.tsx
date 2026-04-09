@@ -2,9 +2,26 @@ import Block from "./Block";
 import { clsx } from "clsx";
 import { useBoardStore } from "./store/useBoardStore";
 import Controls from "./Controls";
+import { movements } from "./utils/gameboard";
+import { useEffect } from "react";
 
 function App() {
   const boardState = useBoardStore((state) => state);
+  
+  useEffect(() => {
+    function listener(keyboardEvent: KeyboardEvent) {
+      console.log("Keydown: ", keyboardEvent.key);
+  
+        const move_key = keyboardEvent.key as keyof typeof movements;
+  
+        if (move_key) boardState.move(move_key);
+    }
+    document.addEventListener("keydown", listener);
+
+    return () => {
+      document.removeEventListener("keydown", listener);
+    }
+  }, [boardState]);
 
   return (
     <div className="bg-amber-100">
@@ -12,16 +29,16 @@ function App() {
         <section className="flex flex-row gap-5 mb-5 w-full justify-center">
           <div className="bg-stone-200 py-2 flex flex-col items-center rounded-2xl min-w-[6rem]">
             <span>Score</span>
-            <span>1000</span>
+            <span>Not Impl</span>
           </div>
           <div className="bg-gray-200 py-2 flex flex-col items-center rounded-2xl min-w-[6rem]">
             <span>Max Score</span>
-            <span>9999</span>
+            <span>Not impl</span>
           </div>
         </section>
         <div className="bg-neutral-500 rounded-2xl m-1 p-4 w-fit">
           <div className="size-80 sm:size-96 grid grid-rows-4 grid-cols-4 gap-4">
-            {boardState.board.map((row, i) =>
+            {boardState.boards[0].map((row, i) =>
               row.map((element, j) => (
                 <Block
                   className={clsx({
@@ -42,7 +59,7 @@ function App() {
                 >
                   {element || <></>}
                 </Block>
-              ))
+              )),
             )}
           </div>
         </div>

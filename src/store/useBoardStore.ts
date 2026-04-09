@@ -1,28 +1,59 @@
 import { create } from "zustand";
-import { addNewNumberToBoard, Board, createBoard, moveDown, moveLeft, movements, moveRight, moveUp } from "../utils/gameboard";
+import {
+  addNewNumberToBoard,
+  Board,
+  createBoard,
+  moveDown,
+  moveLeft,
+  movements,
+  moveRight,
+  moveUp,
+} from "../utils/gameboard";
 
 interface IUseBoardStore {
-  board: Board;
+  boards: Array<Board>;
   moveLeft: VoidFunction;
   moveRight: VoidFunction;
   moveUp: VoidFunction;
   moveDown: VoidFunction;
   addNew: VoidFunction;
   move: (move: keyof typeof movements) => void;
+  undo: VoidFunction;
 }
 
 export const useBoardStore = create<IUseBoardStore>((set) => ({
-  board: createBoard(),
-  moveLeft: () => set((curState) => ({ board: moveLeft(curState.board) })),
-  moveRight: () => set((curState) => ({ board: moveRight(curState.board) })),
-  moveUp: () => set((curState) => ({ board: moveUp(curState.board) })),
-  moveDown: () => set((curState) => ({ board: moveDown(curState.board) })),
+  boards: [createBoard()],
+  moveLeft: () =>
+    set((curState) => ({ boards: [moveLeft(curState.boards[0]), ...curState.boards]})),
+  moveRight: () =>
+    set((curState) => ({
+      boards: [moveRight(curState.boards[0]), ...curState.boards],
+    })),
+  moveUp: () =>
+    set((curState) => ({
+      boards: [moveUp(curState.boards[0]), ...curState.boards],
+    })),
+  moveDown: () =>
+    set((curState) => ({
+      boards: [moveDown(curState.boards[0]), ...curState.boards],
+    })),
   addNew: () =>
-    set((curState) => ({ board: addNewNumberToBoard(curState.board) })),
+    set((curState) => ({
+      boards: [addNewNumberToBoard(curState.boards[0]), ...curState.boards],
+    })),
   move: (move) => {
     if (movements[move]) {
-      set((curState) => ({ board: movements[move](curState.board) }));
+      set((curState) => ({
+        boards: [movements[move](curState.boards[0]), ...curState.boards],
+      }));
     }
   },
+  undo: () =>
+    set((curState) => ({
+      boards:
+        curState.boards.length >= 2
+          ? curState.boards.slice(1)
+          : curState.boards,
+    })),
 }));
 

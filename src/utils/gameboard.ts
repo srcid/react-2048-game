@@ -20,12 +20,15 @@ function newNumber(): number {
  * @returns Pair of indexes i,j which contains 0
  */
 export function emptyBlocks(board: Board): Pair[] {
-  const arr = [];
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[0].length; j++) {
-      if (board[i][j] === 0) arr.push([i, j] as Pair);
-    }
-  }
+  const arr: Pair[] = [];
+
+  board.forEach((row, rowIdx) => {
+    row.forEach((e, eIdx) => {
+      if (e === 0) {
+        arr.push([rowIdx, eIdx]);
+      }
+    });
+  });
 
   return arr;
 }

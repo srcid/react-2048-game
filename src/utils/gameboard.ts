@@ -41,10 +41,12 @@ export function emptyBlocks(board: Board): Pair[] {
 export function addNewNumberToBoard(board: Board): Board {
   console.log("Add new number to board");
   const emptiesBlocks = emptyBlocks(board);
-  
+
   if (emptiesBlocks.length === 0) return board;
-  
-  const emptiesBlocksRandomIdx = Math.floor(Math.random() * emptiesBlocks.length);
+
+  const emptiesBlocksRandomIdx = Math.floor(
+    Math.random() * emptiesBlocks.length,
+  );
   const [i, j] = emptiesBlocks[emptiesBlocksRandomIdx];
 
   return board.with(i, board[i].with(j, newNumber()));
@@ -53,7 +55,7 @@ export function addNewNumberToBoard(board: Board): Board {
 function slideAndMergeRowToLeft(row: number[]): number[] {
   let filtered = row.filter((value) => value !== 0);
 
-  for (let i = 0; i < filtered.length-1; i++) {
+  for (let i = 0; i < filtered.length - 1; i++) {
     if (filtered[i] === filtered[i + 1]) {
       filtered[i] *= 2;
       filtered[i + 1] = 0;
@@ -61,7 +63,7 @@ function slideAndMergeRowToLeft(row: number[]): number[] {
     }
   }
 
-  filtered = filtered.filter((value) => value !== 0)
+  filtered = filtered.filter((value) => value !== 0);
 
   return [...filtered, ...Array(4 - filtered.length).fill(0)];
 }
@@ -89,12 +91,12 @@ export function moveDown(board: Board): Board {
   return board
     .transpose()
     .map((row) => slideAndMergeRowToLeft(row.reverse()).reverse())
-    .transpose()
+    .transpose();
 }
 
 export const movements = {
   ArrowLeft: moveLeft,
   ArrowRight: moveRight,
   ArrowUp: moveUp,
-  ArrowDown: moveDown
-}
+  ArrowDown: moveDown,
+};

@@ -34,6 +34,24 @@ describe("ndArrCmp", () => {
     // Casting to any to test the runtime logic against mixed types
     expect(ndArrCmp([1, [2]], [1, 2])).toBe(false);
   });
+
+  test("should return false when comparing 4x4 matrix with similar elements", () => {
+    const arr1 = [
+      [0, 0, 0, 0],
+      [0, 2, 0, 0],
+      [0, 0, 2, 4],
+      [4, 0, 0, 4],
+    ];
+
+    const arr2 = [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [4, 2, 2, 8],
+    ];
+
+    expect(ndArrCmp(arr1, arr2)).toBe(false);
+  });
 });
 
 describe("pushIfNotEqualsTop", () => {

@@ -286,7 +286,22 @@ describe("2048 Board Movement Logic", () => {
         [0, 0, 0, 0],
         [0, 4, 4, 8],
       ];
+      const expected2 = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 8, 8],
+      ];
+      const expected3 = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 16],
+      ];
+
       expect(moveRight(input)).toEqual(expected);
+      expect(moveRight(expected)).toEqual(expected2);
+      expect(moveRight(expected2)).toEqual(expected3);
     });
   });
 

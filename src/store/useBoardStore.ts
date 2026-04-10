@@ -9,6 +9,7 @@ import {
   moveUp,
 } from "../utils/gameboard";
 import { Board } from "../utils/types";
+import { pushIfNotEqualsTop } from "../utils/helpers";
 
 interface IUseBoardStore {
   boards: Array<Board>;
@@ -24,18 +25,23 @@ interface IUseBoardStore {
 export const useBoardStore = create<IUseBoardStore>((set) => ({
   boards: [createBoard()],
   moveLeft: () =>
-    set((curState) => ({ boards: [moveLeft(curState.boards[0]), ...curState.boards]})),
+    set((curState) => ({
+      boards: pushIfNotEqualsTop(curState.boards, moveLeft(curState.boards[0])),
+    })),
   moveRight: () =>
     set((curState) => ({
-      boards: [moveRight(curState.boards[0]), ...curState.boards],
+      boards: pushIfNotEqualsTop(
+        curState.boards,
+        moveRight(curState.boards[0]),
+      ),
     })),
   moveUp: () =>
     set((curState) => ({
-      boards: [moveUp(curState.boards[0]), ...curState.boards],
+      boards: pushIfNotEqualsTop(curState.boards, moveUp(curState.boards[0])),
     })),
   moveDown: () =>
     set((curState) => ({
-      boards: [moveDown(curState.boards[0]), ...curState.boards],
+      boards: pushIfNotEqualsTop(curState.boards, moveDown(curState.boards[0])),
     })),
   addNew: () =>
     set((curState) => ({
@@ -56,4 +62,3 @@ export const useBoardStore = create<IUseBoardStore>((set) => ({
           : curState.boards,
     })),
 }));
-

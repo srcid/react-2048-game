@@ -1,6 +1,10 @@
 import {
   Board,
   emptyBlocks,
+  moveDown,
+  moveLeft,
+  moveRight,
+  moveUp,
   slideAndMergeRowToLeft,
 } from "../../src/utils/gameboard";
 
@@ -228,6 +232,114 @@ describe("slideAndMergeRowToTheLeft", () => {
 
     test("should handle empty input", () => {
       expect(slideAndMergeRowToLeft([])).toEqual([]);
+    });
+  });
+});
+
+describe("2048 Board Movement Logic", () => {
+  // Helper to create a fresh 4x4 board to ensure no mutation leaks between tests
+  describe("moveLeft", () => {
+    it("should slide and merge elements to the left", () => {
+      const input = [
+        [2, 2, 0, 0],
+        [2, 0, 2, 0],
+        [4, 4, 4, 4],
+        [0, 8, 0, 8],
+      ];
+      const expected = [
+        [4, 0, 0, 0],
+        [4, 0, 0, 0],
+        [8, 8, 0, 0],
+        [16, 0, 0, 0],
+      ];
+      expect(moveLeft(input)).toEqual(expected);
+    });
+  });
+
+  describe("moveRight", () => {
+    it("should slide and merge elements to the right", () => {
+      const input = [
+        [0, 0, 2, 2],
+        [2, 0, 2, 0],
+        [4, 4, 4, 4],
+        [8, 0, 8, 0],
+      ];
+      const expected = [
+        [0, 0, 0, 4],
+        [0, 0, 0, 4],
+        [0, 0, 8, 8],
+        [0, 0, 0, 16],
+      ];
+      expect(moveRight(input)).toEqual(expected);
+    });
+  });
+
+  describe("moveUp", () => {
+    it("should slide and merge elements upwards", () => {
+      const input = [
+        [2, 0, 0, 8],
+        [2, 4, 0, 0],
+        [0, 4, 2, 8],
+        [0, 0, 2, 0],
+      ];
+      const expected = [
+        [4, 8, 4, 16],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ];
+      expect(moveUp(input)).toEqual(expected);
+    });
+  });
+
+  describe("moveDown", () => {
+    it("should slide and merge elements downwards", () => {
+      const input = [
+        [2, 0, 2, 0],
+        [2, 4, 2, 0],
+        [0, 4, 0, 8],
+        [0, 0, 0, 8],
+      ];
+      const expected = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [4, 8, 4, 16],
+      ];
+      expect(moveDown(input)).toEqual(expected);
+    });
+  });
+
+  describe("Edge Cases & Constraints", () => {
+    it("should return a new array instance (immutability)", () => {
+      const input = [
+        [2, 2, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ];
+      const result = moveLeft(input);
+
+      expect(result).not.toBe(input); // Reference should be different
+      expect(result[0]).not.toBe(input[0]); // Row references should be different
+    });
+
+    it('should not change a "locked" board (no possible moves)', () => {
+      const lockedBoard = [
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+      ];
+      expect(moveLeft(lockedBoard)).toEqual(lockedBoard);
+      expect(moveUp(lockedBoard)).toEqual(lockedBoard);
+    });
+
+    it("should handle an empty board", () => {
+      const empty = Array(4)
+        .fill(null)
+        .map(() => Array(4).fill(0));
+      expect(moveLeft(empty)).toEqual(empty);
     });
   });
 });

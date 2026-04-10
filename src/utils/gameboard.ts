@@ -9,6 +9,11 @@ export function createBoard(): Board {
   return board;
 }
 
+/**
+ * 80% of returing 2 and 20% of returing 4
+ *
+ * @returns 2 or 4
+ */
 function newNumber(): number {
   return Math.random() <= 0.8 ? 2 : 4;
 }

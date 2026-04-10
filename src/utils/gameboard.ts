@@ -13,11 +13,17 @@ function newNumber(): number {
   return Math.random() <= 0.8 ? 2 : 4;
 }
 
-function emptyBlocks(board: Board): Pair[] {
+/**
+ * Return the empty blocks of the given board
+ *
+ * @param board
+ * @returns Pair of indexes i,j which contains 0
+ */
+export function emptyBlocks(board: Board): Pair[] {
   const arr = [];
   for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board.length; j++) {
-      if (board[i][j] === 0) arr.push([i,j] as Pair)
+    for (let j = 0; j < board[0].length; j++) {
+      if (board[i][j] === 0) arr.push([i, j] as Pair);
     }
   }
 

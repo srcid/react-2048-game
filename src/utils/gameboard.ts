@@ -37,7 +37,7 @@ export function addNewNumberToBoard(board: Board): Board {
 }
 
 function slideAndMergeRowToLeft(row: number[]): number[] {
-  let filtered = row.filter((value) => value != 0);
+  let filtered = row.filter((value) => value !== 0);
 
   for (let i = 0; i < filtered.length-1; i++) {
     if (filtered[i] === filtered[i + 1]) {

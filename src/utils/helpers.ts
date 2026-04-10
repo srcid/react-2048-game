@@ -1,4 +1,4 @@
-import { Board } from "./gameboard";
+import { Board } from "./types";
 
 export function ndArrCmp<T>(arr1: T[], arr2: T[]): boolean {
   const n = arr1.length;

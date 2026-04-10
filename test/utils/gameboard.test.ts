@@ -1,5 +1,4 @@
 import {
-  Board,
   emptyBlocks,
   moveDown,
   moveLeft,
@@ -7,6 +6,7 @@ import {
   moveUp,
   slideAndMergeRowToLeft,
 } from "../../src/utils/gameboard";
+import { Board } from "../../src/utils/types";
 
 //emptyBlocks(board: Board): Pair[]
 describe("EmptyBlocks", () => {

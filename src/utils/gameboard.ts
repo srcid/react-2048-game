@@ -1,7 +1,5 @@
 import "./extensions";
-
-export type Board = number[][];
-export type Pair = [number, number];
+import { Board, Pair } from "./types";
 
 export function createBoard(): Board {
   let board = Array(4).fill(Array(4).fill(0));

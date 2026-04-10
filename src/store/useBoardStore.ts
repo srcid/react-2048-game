@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import {
   addNewNumberToBoard,
-  Board,
   createBoard,
   moveDown,
   moveLeft,
@@ -9,6 +8,7 @@ import {
   moveRight,
   moveUp,
 } from "../utils/gameboard";
+import { Board } from "../utils/types";
 
 interface IUseBoardStore {
   boards: Array<Board>;

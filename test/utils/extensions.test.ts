@@ -1,4 +1,3 @@
-// import { expect, test } from "vitest";
 import "../../src/utils/extensions.ts";
 
 test("transposes a square matrix", () => {

@@ -81,7 +81,9 @@ export function moveLeft(board: Board): Board {
 
 export function moveRight(board: Board): Board {
   console.log("Moving right.");
-  return board.map((row) => slideAndMergeRowToLeft(row.reverse()).reverse());
+  return board.map((row) =>
+    slideAndMergeRowToLeft(row.toReversed()).toReversed(),
+  );
 }
 
 export function moveUp(board: Board): Board {
@@ -96,7 +98,7 @@ export function moveDown(board: Board): Board {
   console.log("Moving down.");
   return board
     .transpose()
-    .map((row) => slideAndMergeRowToLeft(row.reverse()).reverse())
+    .map((row) => slideAndMergeRowToLeft(row.toReversed()).toReversed())
     .transpose();
 }
 

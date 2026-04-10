@@ -1,16 +1,28 @@
-import { Board } from "./types";
+import { Board, NDArray } from "./types";
 
-export function ndArrCmp<T>(arr1: T[], arr2: T[]): boolean {
-  const n = arr1.length;
-  const m = arr2.length;
+/**
+ * Recursively compares two N-dimensional arrays for deep equality.
+ */
+export function ndArrCmp<T>(arr1: NDArray<T>, arr2: NDArray<T>): boolean {
+  if (arr1.length !== arr2.length) return false;
 
-  if (n !== m) return false;
+  for (let i = 0; i < arr1.length; i++) {
+    const valA = arr1[i];
+    const valB = arr2[i];
 
-  for (let i = 0; i < n; i++) {
-    if (Array.isArray(arr1[i]) && Array.isArray(arr2[i]))
-      return ndArrCmp(arr1[i] as T[], arr2[i] as T[]);
-    else if (arr1[i] !== arr2[i]) {
-      return false;
+    const isArrayA = Array.isArray(valA);
+    const isArrayB = Array.isArray(valB);
+
+    if (isArrayA !== isArrayB) return false;
+
+    if (isArrayA && isArrayB) {
+      if (!ndArrCmp(valA as NDArray<T>, valB as NDArray<T>)) {
+        return false;
+      }
+    } else {
+      if (valA !== valB) {
+        return false;
+      }
     }
   }
 

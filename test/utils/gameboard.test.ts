@@ -272,6 +272,22 @@ describe("2048 Board Movement Logic", () => {
       ];
       expect(moveRight(input)).toEqual(expected);
     });
+
+    it("should slide and merge elements to the right with only the bottom row filled", () => {
+      const input = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [4, 2, 2, 8],
+      ];
+      const expected = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 4, 4, 8],
+      ];
+      expect(moveRight(input)).toEqual(expected);
+    });
   });
 
   describe("moveUp", () => {

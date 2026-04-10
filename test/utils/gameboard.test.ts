@@ -1,4 +1,8 @@
-import { Board, emptyBlocks } from "../../src/utils/gameboard";
+import {
+  Board,
+  emptyBlocks,
+  slideAndMergeRowToLeft,
+} from "../../src/utils/gameboard";
 
 //emptyBlocks(board: Board): Pair[]
 describe("EmptyBlocks", () => {
@@ -168,6 +172,62 @@ describe("EmptyBlocks", () => {
         [3, 0],
         [3, 3],
       ]);
+    });
+  });
+});
+
+describe("slideAndMergeRowToTheLeft", () => {
+  describe("slideAndMergeRowToLeft - length of 4", () => {
+    test("should slide and merge correctly", () => {
+      // Basic sliding and merging
+      expect(slideAndMergeRowToLeft([2, 2, 2, 2])).toEqual([4, 4, 0, 0]);
+      expect(slideAndMergeRowToLeft([2, 0, 2, 0])).toEqual([4, 0, 0, 0]);
+      expect(slideAndMergeRowToLeft([2, 4, 8, 8])).toEqual([2, 4, 16, 0]);
+      expect(slideAndMergeRowToLeft([4, 4, 8, 8])).toEqual([8, 16, 0, 0]);
+
+      // Handling non-mergable sequences
+      expect(slideAndMergeRowToLeft([2, 4, 8, 16])).toEqual([2, 4, 8, 16]);
+
+      // Handling leading/trailing zeros
+      expect(slideAndMergeRowToLeft([0, 0, 2, 2])).toEqual([4, 0, 0, 0]);
+
+      // The "Triple" case - 2048 rules state the merge happens from the direction of the slide
+      expect(slideAndMergeRowToLeft([2, 2, 2, 0])).toEqual([4, 2, 0, 0]);
+      expect(slideAndMergeRowToLeft([2, 2, 0, 2])).toEqual([4, 2, 0, 0]);
+      expect(slideAndMergeRowToLeft([2, 0, 2, 2])).toEqual([4, 2, 0, 0]);
+
+      // Empty case
+      expect(slideAndMergeRowToLeft([0, 0, 0, 0])).toEqual([0, 0, 0, 0]);
+    });
+  });
+
+  describe("slideAndMergeRowToLeft - Arbitrary Length", () => {
+    test("should handle varying array sizes", () => {
+      // Length 1
+      expect(slideAndMergeRowToLeft([4])).toEqual([4]);
+
+      // Length 3
+      expect(slideAndMergeRowToLeft([2, 2, 4])).toEqual([4, 4, 0]);
+
+      // Length 5
+      expect(slideAndMergeRowToLeft([2, 0, 2, 2, 2])).toEqual([4, 4, 0, 0, 0]);
+
+      // Length 8
+      const longRow = [2, 2, 4, 4, 8, 8, 16, 16];
+      const longResult = [4, 8, 16, 32, 0, 0, 0, 0];
+      expect(slideAndMergeRowToLeft(longRow)).toEqual(longResult);
+    });
+
+    test("should maintain original array length", () => {
+      const lengths = [0, 1, 5, 10, 100];
+      lengths.forEach((len) => {
+        const input = Array(len).fill(2);
+        expect(slideAndMergeRowToLeft(input).length).toBe(len);
+      });
+    });
+
+    test("should handle empty input", () => {
+      expect(slideAndMergeRowToLeft([])).toEqual([]);
     });
   });
 });

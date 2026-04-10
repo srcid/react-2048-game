@@ -50,7 +50,10 @@ export const useBoardStore = create<IUseBoardStore>((set) => ({
   move: (move) => {
     if (movements[move]) {
       set((curState) => ({
-        boards: [movements[move](curState.boards[0]), ...curState.boards],
+        boards: pushIfNotEqualsTop(
+          curState.boards,
+          movements[move](curState.boards[0]),
+        ),
       }));
     }
   },

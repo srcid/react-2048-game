@@ -1,4 +1,3 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useBoardStore } from "../../src/store/useBoardStore"; // adjust path
 import * as gameboard from "../../src/utils/gameboard";
 

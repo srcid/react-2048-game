@@ -10,12 +10,12 @@ export function ndArrCmp<T>(arr1: NDArray<T>, arr2: NDArray<T>): boolean {
     const valA = arr1[i];
     const valB = arr2[i];
 
-    const isArrayA = Array.isArray(valA);
-    const isArrayB = Array.isArray(valB);
+    const isArrA = Array.isArray(valA);
+    const isArrB = Array.isArray(valB);
 
-    if (isArrayA !== isArrayB) return false;
+    if (isArrA !== isArrB) return false;
 
-    if (isArrayA && isArrayB) {
+    if (isArrA && isArrB) {
       if (!ndArrCmp(valA as NDArray<T>, valB as NDArray<T>)) {
         return false;
       }

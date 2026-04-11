@@ -2,40 +2,40 @@ import { ndArrCmp, pushIfNotEqualsTop } from "../../src/utils/helpers";
 import { Board } from "../../src/utils/types";
 
 describe("ndArrCmp", () => {
-  test("should return true for two empty arrays", () => {
+  it("returns true for two empty arrays", () => {
     expect(ndArrCmp([], [])).toBe(true);
   });
 
-  test("should return false for arrays of different lengths", () => {
+  it("returns false for arrays of different lengths", () => {
     expect(ndArrCmp([1, 2], [1, 2, 3])).toBe(false);
   });
 
-  test("should return true for identical flat arrays", () => {
+  it("returns true for identical flat arrays", () => {
     expect(ndArrCmp([1, "a", true], [1, "a", true])).toBe(true);
   });
 
-  test("should return false for different flat arrays", () => {
+  it("returns false for different flat arrays", () => {
     expect(ndArrCmp([1, 2], [1, 3])).toBe(false);
   });
 
-  test("should return true for deeply nested identical arrays", () => {
+  it("returns true for deeply nested identical arrays", () => {
     const arr1 = [1, [2, [3, 4]], 5];
     const arr2 = [1, [2, [3, 4]], 5];
     expect(ndArrCmp(arr1, arr2)).toBe(true);
   });
 
-  test("should return false if nested structures differ", () => {
+  it("returns false if nested structures differ", () => {
     const arr1 = [1, [2, [3, 4]], 5];
     const arr2 = [1, [2, [3, 99]], 5];
     expect(ndArrCmp(arr1, arr2)).toBe(false);
   });
 
-  test("should return false when comparing an array to a non-array element", () => {
+  it("returns false when comparing an array to a non-array element", () => {
     // Casting to any to test the runtime logic against mixed types
     expect(ndArrCmp([1, [2]], [1, 2])).toBe(false);
   });
 
-  test("should return false when comparing 4x4 matrix with similar elements", () => {
+  it("returns false when comparing 4x4 matrix with similar elements", () => {
     const arr1 = [
       [0, 0, 0, 0],
       [0, 2, 0, 0],
@@ -65,7 +65,7 @@ describe("pushIfNotEqualsTop", () => {
     [1, 1],
   ];
 
-  test("should add a new board to the front if it differs from the current top", () => {
+  it("adds a new board to the front if it differs from the current top", () => {
     const history: Board[] = [boardA];
     const result = pushIfNotEqualsTop(history, boardB);
 
@@ -74,7 +74,7 @@ describe("pushIfNotEqualsTop", () => {
     expect(result[1]).toEqual(boardA);
   });
 
-  test("should not add the board if it is identical to the current top", () => {
+  it("does not add the board if it is identical to the current top", () => {
     const history: Board[] = [boardA];
     const sameBoard: Board = [
       [0, 1],
@@ -87,8 +87,7 @@ describe("pushIfNotEqualsTop", () => {
     expect(result).toBe(history); // Should return original array reference
   });
 
-  test("should handle the 'empty history' edge case", () => {
-    // Note: See 'A Quick Heads-up' below regarding this specific test
+  it('handles the "empty history" edge case', () => {
     const history: Board[] = [];
 
     // In the current implementation, this might throw an error

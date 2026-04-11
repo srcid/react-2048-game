@@ -73,7 +73,7 @@ describe("EmptyBlocks", () => {
       ]);
     });
 
-    test("Empty board", () => {
+    it("returns an empty board when given an empty board", () => {
       const input: Board = [];
       const expected: Board = [];
 
@@ -82,7 +82,7 @@ describe("EmptyBlocks", () => {
   });
 
   describe("emptyBlocks - 4x4 boards", () => {
-    test("returns correct coordinates for most empty board", () => {
+    it("returns correct coordinates for most empty board", () => {
       const input = [
         [0, 0, 0, 0],
         [0, 2, 0, 0],
@@ -183,7 +183,7 @@ describe("EmptyBlocks", () => {
 
 describe("slideAndMergeRowToTheLeft", () => {
   describe("slideAndMergeRowToLeft - length of 4", () => {
-    test("should slide and merge correctly", () => {
+    it("slides and merges correctly", () => {
       // Basic sliding and merging
       expect(slideAndMergeRowToLeft([2, 2, 2, 2])).toEqual([4, 4, 0, 0]);
       expect(slideAndMergeRowToLeft([2, 0, 2, 0])).toEqual([4, 0, 0, 0]);
@@ -207,7 +207,7 @@ describe("slideAndMergeRowToTheLeft", () => {
   });
 
   describe("slideAndMergeRowToLeft - Arbitrary Length", () => {
-    test("should handle varying array sizes", () => {
+    it("handles varying array sizes", () => {
       // Length 1
       expect(slideAndMergeRowToLeft([4])).toEqual([4]);
 
@@ -223,7 +223,7 @@ describe("slideAndMergeRowToTheLeft", () => {
       expect(slideAndMergeRowToLeft(longRow)).toEqual(longResult);
     });
 
-    test("should maintain original array length", () => {
+    it("maintains original array length", () => {
       const lengths = [0, 1, 5, 10, 100];
       lengths.forEach((len) => {
         const input = Array(len).fill(2);
@@ -231,7 +231,7 @@ describe("slideAndMergeRowToTheLeft", () => {
       });
     });
 
-    test("should handle empty input", () => {
+    it("handles empty input", () => {
       expect(slideAndMergeRowToLeft([])).toEqual([]);
     });
   });
@@ -240,7 +240,7 @@ describe("slideAndMergeRowToTheLeft", () => {
 describe("2048 Board Movement Logic", () => {
   // Helper to create a fresh 4x4 board to ensure no mutation leaks between tests
   describe("moveLeft", () => {
-    it("should slide and merge elements to the left", () => {
+    it("slides and merges elements to the left", () => {
       const input = [
         [2, 2, 0, 0],
         [2, 0, 2, 0],
@@ -258,7 +258,7 @@ describe("2048 Board Movement Logic", () => {
   });
 
   describe("moveRight", () => {
-    it("should slide and merge elements to the right", () => {
+    it("slides and merges elements to the right", () => {
       const input = [
         [0, 0, 2, 2],
         [2, 0, 2, 0],
@@ -274,7 +274,7 @@ describe("2048 Board Movement Logic", () => {
       expect(moveRight(input)).toEqual(expected);
     });
 
-    it("should slide and merge elements to the right with only the bottom row filled", () => {
+    it("slides and merges elements to the right with only the bottom row filled", () => {
       const input = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -307,7 +307,7 @@ describe("2048 Board Movement Logic", () => {
   });
 
   describe("moveUp", () => {
-    it("should slide and merge elements upwards", () => {
+    it("slides and merge elements upwards", () => {
       const input = [
         [2, 0, 0, 8],
         [2, 4, 0, 0],
@@ -325,7 +325,7 @@ describe("2048 Board Movement Logic", () => {
   });
 
   describe("moveDown", () => {
-    it("should slide and merge elements downwards", () => {
+    it("slides and merges elements downwards", () => {
       const input = [
         [2, 0, 2, 0],
         [2, 4, 2, 0],
@@ -343,7 +343,7 @@ describe("2048 Board Movement Logic", () => {
   });
 
   describe("Edge Cases & Constraints", () => {
-    it("should return a new array instance (immutability)", () => {
+    it("returns a new array instance (immutability)", () => {
       const input = [
         [2, 2, 0, 0],
         [0, 0, 0, 0],
@@ -356,7 +356,7 @@ describe("2048 Board Movement Logic", () => {
       expect(result[0]).not.toBe(input[0]); // Row references should be different
     });
 
-    it('should not change a "locked" board (no possible moves)', () => {
+    it('does not change a "locked" board (no possible moves)', () => {
       const lockedBoard = [
         [2, 4, 2, 4],
         [4, 2, 4, 2],
@@ -367,7 +367,7 @@ describe("2048 Board Movement Logic", () => {
       expect(moveUp(lockedBoard)).toEqual(lockedBoard);
     });
 
-    it("should handle an empty board", () => {
+    it("handles an empty board", () => {
       const empty = Array(4)
         .fill(null)
         .map(() => Array(4).fill(0));
@@ -384,7 +384,7 @@ describe("addNewNumberToBoard", () => {
     vi.restoreAllMocks();
   });
 
-  it("should add a specific value at a specific position", () => {
+  it("adds a specific value at a specific position", () => {
     const board = [
       [0, 0],
       [0, 0],
@@ -395,7 +395,7 @@ describe("addNewNumberToBoard", () => {
     expect(result).not.toBe(board); // Check immutability (board.with creates a copy)
   });
 
-  it("should throw an error if the board is full", () => {
+  it("throws an error if the board is full", () => {
     const fullBoard = [
       [2, 4],
       [8, 16],
@@ -404,7 +404,7 @@ describe("addNewNumberToBoard", () => {
     expect(() => addNewNumberToBoard(fullBoard)).toThrow("Full filled board.");
   });
 
-  it("should throw an error if the specific position is already filled", () => {
+  it("throws an error if the specific position is already filled", () => {
     const board = [
       [2, 0],
       [0, 0],
@@ -414,7 +414,7 @@ describe("addNewNumberToBoard", () => {
     );
   });
 
-  it("should throw an error if the value is not a power of two", () => {
+  it("throws an error if the value is not a power of two", () => {
     const board = [
       [0, 0],
       [0, 0],
@@ -428,7 +428,7 @@ describe("addNewNumberToBoard", () => {
     );
   });
 
-  it("should pick a random empty spot when no position is provided", () => {
+  it("picks a random empty spot when no position is provided", () => {
     const board = [
       [2, 0],
       [2, 0],
@@ -452,7 +452,7 @@ describe("addNewNumberToBoard", () => {
     ]).toContainEqual(result);
   });
 
-  it("should use a generated number if no value is provided", () => {
+  it("uses a generated number if no value is provided", () => {
     const board = [[0]];
     // If you have a newNumber() utility, you might want to mock it.
     // Here we just check if the result is a number at the expected position.

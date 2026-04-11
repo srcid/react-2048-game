@@ -1,4 +1,5 @@
 import {
+  addNewNumberToBoard,
   emptyBlocks,
   moveDown,
   moveLeft,
@@ -372,5 +373,90 @@ describe("2048 Board Movement Logic", () => {
         .map(() => Array(4).fill(0));
       expect(moveLeft(empty)).toEqual(empty);
     });
+  });
+});
+
+describe("addNewNumberToBoard", () => {
+  // Mock dependencies or helper functions if necessary
+  // Assuming Board is number[][] and Pair is [number, number]
+
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should add a specific value at a specific position", () => {
+    const board = [
+      [0, 0],
+      [0, 0],
+    ];
+    const result = addNewNumberToBoard(board, [0, 1], 4);
+
+    expect(result[0][1]).toBe(4);
+    expect(result).not.toBe(board); // Check immutability (board.with creates a copy)
+  });
+
+  it("should throw an error if the board is full", () => {
+    const fullBoard = [
+      [2, 4],
+      [8, 16],
+    ];
+    // This assumes your emptyBlocks helper returns [] for this board
+    expect(() => addNewNumberToBoard(fullBoard)).toThrow("Full filled board.");
+  });
+
+  it("should throw an error if the specific position is already filled", () => {
+    const board = [
+      [2, 0],
+      [0, 0],
+    ];
+    expect(() => addNewNumberToBoard(board, [0, 0], 4)).toThrow(
+      "Position already filled.",
+    );
+  });
+
+  it("should throw an error if the value is not a power of two", () => {
+    const board = [
+      [0, 0],
+      [0, 0],
+    ];
+    // Testing 3 (binary 11) or 6 (binary 110)
+    expect(() => addNewNumberToBoard(board, [0, 0], 3)).toThrow(
+      "Invalid value.",
+    );
+    expect(() => addNewNumberToBoard(board, [0, 0], 6)).toThrow(
+      "Invalid value.",
+    );
+  });
+
+  it("should pick a random empty spot when no position is provided", () => {
+    const board = [
+      [2, 0],
+      [2, 0],
+    ];
+
+    // Force Math.random to pick the second available empty block
+    // emptiesBlocks would be [[0, 1], [1, 1]]
+    vi.spyOn(Math, "random").mockReturnValue(0.99);
+
+    const result = addNewNumberToBoard(board);
+
+    expect([
+      [
+        [2, 4],
+        [2, 0],
+      ],
+      [
+        [2, 0],
+        [2, 4],
+      ],
+    ]).toContainEqual(result);
+  });
+
+  it("should use a generated number if no value is provided", () => {
+    const board = [[0]];
+    // If you have a newNumber() utility, you might want to mock it.
+    // Here we just check if the result is a number at the expected position.
+    const result = addNewNumberToBoard(board, [0, 0]);
+    expect(result[0][0]).toBeGreaterThan(0);
   });
 });

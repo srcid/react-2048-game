@@ -38,18 +38,42 @@ export function emptyBlocks(board: Board): Pair[] {
   return arr;
 }
 
-export function addNewNumberToBoard(board: Board): Board {
+export function addNewNumberToBoard(
+  board: Board,
+  pos?: Pair,
+  val?: number,
+): Board {
   console.log("Add new number to board");
   const emptiesBlocks = emptyBlocks(board);
 
-  if (emptiesBlocks.length === 0) return board;
+  if (emptiesBlocks.length === 0) {
+    throw new Error("Full filled board.");
+  }
 
   const emptiesBlocksRandomIdx = Math.floor(
     Math.random() * emptiesBlocks.length,
   );
-  const [i, j] = emptiesBlocks[emptiesBlocksRandomIdx];
 
-  return board.with(i, board[i].with(j, newNumber()));
+  const [i, j] = pos ?? emptiesBlocks[emptiesBlocksRandomIdx];
+  const x = val ?? newNumber();
+
+  // case position passed was not free.
+  if (pos !== undefined && board[i][j] != 0) {
+    throw new Error("Position already filled.");
+  }
+
+  // case value passed was not a power of two.
+  if (
+    val !== undefined &&
+    x
+      .toString(2)
+      .split("")
+      .filter((e) => e === "1")?.length !== 1
+  ) {
+    throw new Error("Invalid value.");
+  }
+
+  return board.with(i, board[i].with(j, x));
 }
 
 /**

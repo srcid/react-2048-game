@@ -4,7 +4,7 @@
 
 import { cleanup, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Block from "../src/Block";
+import Block from "../../src/components/Block";
 
 describe("Block", () => {
   beforeEach(() => {

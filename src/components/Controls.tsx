@@ -4,7 +4,7 @@ import {
   AiOutlineArrowRight,
   AiOutlineArrowUp,
 } from "react-icons/ai";
-import { useBoardStore } from "./store/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import { MdOutlinePlusOne } from "react-icons/md";
 import { FaUndoAlt } from "react-icons/fa";
 import clsx from "clsx";

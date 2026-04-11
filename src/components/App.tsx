@@ -1,26 +1,26 @@
 import Block from "./Block";
 import { clsx } from "clsx";
-import { useBoardStore } from "./store/useBoardStore";
+import { useBoardStore } from "../store/useBoardStore";
 import Controls from "./Controls";
-import { movements } from "./utils/gameboard";
+import { movements } from "../utils/gameboard";
 import { useEffect } from "react";
 
 function App() {
   const boardState = useBoardStore((state) => state);
-  
+
   useEffect(() => {
     function listener(keyboardEvent: KeyboardEvent) {
       console.log("Keydown: ", keyboardEvent.key);
-  
-        const move_key = keyboardEvent.key as keyof typeof movements;
-  
-        if (move_key) boardState.move(move_key);
+
+      const move_key = keyboardEvent.key as keyof typeof movements;
+
+      if (move_key) boardState.move(move_key);
     }
     document.addEventListener("keydown", listener);
 
     return () => {
       document.removeEventListener("keydown", listener);
-    }
+    };
   }, [boardState]);
 
   return (

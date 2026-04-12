@@ -96,4 +96,35 @@ describe("useBoardStore", () => {
     expect(state.boards[0]).toEqual(movedRight);
     expect(spy).toHaveBeenCalled();
   });
+
+  it.each(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"] as const)(
+    "handles move by $s arrow key",
+    (moveKey) => {
+      const spyMoveUp = vi.spyOn(gameboard.movements, "ArrowUp");
+      const spyMoveDown = vi.spyOn(gameboard.movements, "ArrowDown");
+      const spyMoveLeft = vi.spyOn(gameboard.movements, "ArrowLeft");
+      const spyMoveRight = vi.spyOn(gameboard.movements, "ArrowRight");
+      const state = useBoardStore.getState();
+      const spyMove = vi.spyOn(state, "move");
+
+      state.move(moveKey);
+
+      expect(spyMove).toHaveBeenCalled();
+
+      switch (moveKey) {
+        case "ArrowUp":
+          expect(spyMoveUp).toHaveBeenCalledAfter(spyMove);
+          break;
+        case "ArrowDown":
+          expect(spyMoveDown).toHaveBeenCalledAfter(spyMove);
+          break;
+        case "ArrowLeft":
+          expect(spyMoveLeft).toHaveBeenCalledAfter(spyMove);
+          break;
+        case "ArrowRight":
+          expect(spyMoveRight).toHaveBeenCalledAfter(spyMove);
+          break;
+      }
+    },
+  );
 });

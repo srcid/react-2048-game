@@ -8,8 +8,8 @@ import {
   moveRight,
   moveUp,
 } from "../utils/gameboard";
-import { Board } from "../utils/types";
 import { pushIfNotEqualsTop } from "../utils/helpers";
+import { Board } from "../utils/types";
 
 interface IUseBoardStore {
   boards: Array<Board>;

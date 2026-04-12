@@ -127,4 +127,49 @@ describe("useBoardStore", () => {
       }
     },
   );
+
+  it.each([
+    "Enter",
+    "Escape",
+    "Tab",
+    " ",
+    "Backspace",
+    "Delete",
+    "Home",
+    "End",
+    "PageUp",
+    "PageDown",
+    "Insert",
+    "a",
+    "A",
+    "1",
+    "!",
+    "ShiftLeft",
+    "ControlLeft",
+    "AltLeft",
+    "MetaLeft",
+    "F1",
+    "F12",
+  ] as const)(
+    "does not trigger any movement for incorrect key $s",
+    (invalidKey) => {
+      const spyMoveUp = vi.spyOn(gameboard.movements, "ArrowUp");
+      const spyMoveDown = vi.spyOn(gameboard.movements, "ArrowDown");
+      const spyMoveLeft = vi.spyOn(gameboard.movements, "ArrowLeft");
+      const spyMoveRight = vi.spyOn(gameboard.movements, "ArrowRight");
+
+      const state = useBoardStore.getState();
+      const spyMove = vi.spyOn(state, "move");
+
+      // @ts-expect-error - intentionally passing invalid key to test runtime behavior
+      state.move(invalidKey);
+
+      expect(spyMove).toHaveBeenCalled();
+
+      expect(spyMoveUp).not.toHaveBeenCalled();
+      expect(spyMoveDown).not.toHaveBeenCalled();
+      expect(spyMoveLeft).not.toHaveBeenCalled();
+      expect(spyMoveRight).not.toHaveBeenCalled();
+    },
+  );
 });

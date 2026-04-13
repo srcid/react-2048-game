@@ -47,7 +47,7 @@ export function addNewNumberToBoard(
   const emptiesBlocks = emptyBlocks(board);
 
   if (emptiesBlocks.length === 0) {
-    throw new Error("Full filled board.");
+    throw new Error("Fulfilled board.");
   }
 
   const emptiesBlocksRandomIdx = Math.floor(

@@ -401,7 +401,7 @@ describe("addNewNumberToBoard", () => {
       [8, 16],
     ];
     // This assumes your emptyBlocks helper returns [] for this board
-    expect(() => addNewNumberToBoard(fullBoard)).toThrow("Full filled board.");
+    expect(() => addNewNumberToBoard(fullBoard)).toThrow("Fulfilled board.");
   });
 
   it("throws an error if the specific position is already filled", () => {

@@ -1,10 +1,10 @@
 import "./extensions";
+import { pipe } from "./functional";
 import { Board, Pair } from "./types";
 
 export function createBoard(): Board {
-  let board = Array(4).fill(Array(4).fill(0));
-  board = addNewNumberToBoard(board);
-  board = addNewNumberToBoard(board);
+  let board = Array(4).fill(Array(4).fill(0)); // generate empty board;
+  board = pipe(addNewNumberToBoard, addNewNumberToBoard)(board);
 
   return board;
 }
@@ -47,7 +47,6 @@ export function addNewNumberToBoard(
   pos?: Pair,
   val?: number,
 ): Board {
-  console.log("Add new number to board");
   const emptiesBlocks = emptyBlocks(board);
 
   if (emptiesBlocks.length === 0) {

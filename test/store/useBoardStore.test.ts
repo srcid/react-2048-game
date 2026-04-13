@@ -2,16 +2,20 @@ import { useBoardStore } from "../../src/store/useBoardStore"; // adjust path
 import * as gameboard from "../../src/utils/gameboard";
 
 // Mock the utilities
-vi.mock("../utils/gameboard", () => ({
-  createBoard: vi.fn(() => [
-    [
+vi.mock("../../src/utils/gameboard", async (realGameboard) => {
+  const actual =
+    await realGameboard<typeof import("../../src/utils/gameboard")>();
+
+  return {
+    ...actual,
+    createBoard: vi.fn(() => [
       [0, 0, 0, 0],
       [0, 2, 0, 0],
       [0, 0, 2, 4],
       [4, 0, 0, 4],
-    ],
-  ]),
-}));
+    ]),
+  };
+});
 
 describe("useBoardStore", () => {
   // Reset the store state before each test

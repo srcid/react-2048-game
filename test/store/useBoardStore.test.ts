@@ -176,4 +176,70 @@ describe("useBoardStore", () => {
       expect(spyMoveRight).not.toHaveBeenCalled();
     },
   );
+
+  describe("Add new number to board", () => {
+    it("adds new number to board", () => {
+      const state = useBoardStore.getState();
+      const spyAddNew = vi.spyOn(state, "addNew");
+      const spyGameboardAddNew = vi.spyOn(gameboard, "addNewNumberToBoard");
+      const n = state.boards[0].reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      state.addNew();
+
+      const newState = useBoardStore.getState();
+
+      const m = newState.boards[0].reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      expect(spyAddNew).toHaveBeenCalledOnce();
+      expect(spyGameboardAddNew).toHaveBeenCalledOnce();
+      expect(newState.boards.length).toBe(state.boards.length + 1);
+      expect(m).toBe(n + 1);
+    });
+
+    it("does not add a new number to an fulfilled board", () => {
+      useBoardStore.setState({
+        boards: [
+          [
+            [16, 32, 128, 256],
+            [4, 2, 4, 2],
+            [512, 1024, 2, 4],
+            [4, 2, 2, 4],
+          ],
+        ],
+      });
+
+      const state = useBoardStore.getState();
+
+      const spyAddNew = vi.spyOn(state, "addNew");
+      const spyGameboardAddNew = vi.spyOn(gameboard, "addNewNumberToBoard");
+
+      const n = state.boards[0].reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      state.addNew();
+
+      const newState = useBoardStore.getState();
+
+      const m = newState.boards[0].reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      expect(spyAddNew).toHaveBeenCalledOnce();
+      expect(spyGameboardAddNew.mock.results[0].type).toBe("throw");
+      expect(spyGameboardAddNew.mock.results[0].value.message).toBe(
+        "Fulfilled board.",
+      );
+      expect(newState.boards.length).toBe(state.boards.length);
+      expect(m).toBe(n);
+    });
+  });
 });

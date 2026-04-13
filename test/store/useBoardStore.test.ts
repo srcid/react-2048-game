@@ -37,145 +37,147 @@ describe("useBoardStore", () => {
     expect(state.boards[0]).toEqual(expectedInitialBoard);
   });
 
-  it("should handle moveDown correctly", () => {
-    const spy = vi.spyOn(gameboard, "moveDown");
+  describe("movements", () => {
+    it("should handle moveDown correctly", () => {
+      const spy = vi.spyOn(gameboard, "moveDown");
 
-    useBoardStore.getState().moveDown();
-    const state = useBoardStore.getState();
-    const movedDown = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [4, 2, 2, 8],
-    ];
-
-    expect(state.boards[0]).toEqual(movedDown);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should handle moveUp correctly", () => {
-    const spy = vi.spyOn(gameboard, "moveUp");
-
-    useBoardStore.getState().moveUp();
-    const state = useBoardStore.getState();
-    const movedUp = [
-      [4, 2, 2, 8],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ];
-
-    expect(state.boards[0]).toEqual(movedUp);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should handle moveLeft correctly", () => {
-    const spy = vi.spyOn(gameboard, "moveLeft");
-
-    useBoardStore.getState().moveLeft();
-    const state = useBoardStore.getState();
-    const movedLeft = [
-      [0, 0, 0, 0],
-      [2, 0, 0, 0],
-      [2, 4, 0, 0],
-      [8, 0, 0, 0],
-    ];
-
-    expect(state.boards[0]).toEqual(movedLeft);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should handle moveRight correctly", () => {
-    const spy = vi.spyOn(gameboard, "moveRight");
-
-    useBoardStore.getState().moveRight();
-    const state = useBoardStore.getState();
-    const movedRight = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 2],
-      [0, 0, 2, 4],
-      [0, 0, 0, 8],
-    ];
-
-    expect(state.boards[0]).toEqual(movedRight);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it.each(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"] as const)(
-    "handles move by $s arrow key",
-    (moveKey) => {
-      const spyMoveUp = vi.spyOn(gameboard.movements, "ArrowUp");
-      const spyMoveDown = vi.spyOn(gameboard.movements, "ArrowDown");
-      const spyMoveLeft = vi.spyOn(gameboard.movements, "ArrowLeft");
-      const spyMoveRight = vi.spyOn(gameboard.movements, "ArrowRight");
+      useBoardStore.getState().moveDown();
       const state = useBoardStore.getState();
-      const spyMove = vi.spyOn(state, "move");
+      const movedDown = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [4, 2, 2, 8],
+      ];
 
-      state.move(moveKey);
+      expect(state.boards[0]).toEqual(movedDown);
+      expect(spy).toHaveBeenCalled();
+    });
 
-      expect(spyMove).toHaveBeenCalled();
+    it("should handle moveUp correctly", () => {
+      const spy = vi.spyOn(gameboard, "moveUp");
 
-      switch (moveKey) {
-        case "ArrowUp":
-          expect(spyMoveUp).toHaveBeenCalledAfter(spyMove);
-          break;
-        case "ArrowDown":
-          expect(spyMoveDown).toHaveBeenCalledAfter(spyMove);
-          break;
-        case "ArrowLeft":
-          expect(spyMoveLeft).toHaveBeenCalledAfter(spyMove);
-          break;
-        case "ArrowRight":
-          expect(spyMoveRight).toHaveBeenCalledAfter(spyMove);
-          break;
-      }
-    },
-  );
-
-  it.each([
-    "Enter",
-    "Escape",
-    "Tab",
-    " ",
-    "Backspace",
-    "Delete",
-    "Home",
-    "End",
-    "PageUp",
-    "PageDown",
-    "Insert",
-    "a",
-    "A",
-    "1",
-    "!",
-    "ShiftLeft",
-    "ControlLeft",
-    "AltLeft",
-    "MetaLeft",
-    "F1",
-    "F12",
-  ] as const)(
-    "does not trigger any movement for incorrect key $s",
-    (invalidKey) => {
-      const spyMoveUp = vi.spyOn(gameboard.movements, "ArrowUp");
-      const spyMoveDown = vi.spyOn(gameboard.movements, "ArrowDown");
-      const spyMoveLeft = vi.spyOn(gameboard.movements, "ArrowLeft");
-      const spyMoveRight = vi.spyOn(gameboard.movements, "ArrowRight");
-
+      useBoardStore.getState().moveUp();
       const state = useBoardStore.getState();
-      const spyMove = vi.spyOn(state, "move");
+      const movedUp = [
+        [4, 2, 2, 8],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ];
 
-      // @ts-expect-error - intentionally passing invalid key to test runtime behavior
-      state.move(invalidKey);
+      expect(state.boards[0]).toEqual(movedUp);
+      expect(spy).toHaveBeenCalled();
+    });
 
-      expect(spyMove).toHaveBeenCalled();
+    it("should handle moveLeft correctly", () => {
+      const spy = vi.spyOn(gameboard, "moveLeft");
 
-      expect(spyMoveUp).not.toHaveBeenCalled();
-      expect(spyMoveDown).not.toHaveBeenCalled();
-      expect(spyMoveLeft).not.toHaveBeenCalled();
-      expect(spyMoveRight).not.toHaveBeenCalled();
-    },
-  );
+      useBoardStore.getState().moveLeft();
+      const state = useBoardStore.getState();
+      const movedLeft = [
+        [0, 0, 0, 0],
+        [2, 0, 0, 0],
+        [2, 4, 0, 0],
+        [8, 0, 0, 0],
+      ];
+
+      expect(state.boards[0]).toEqual(movedLeft);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it("should handle moveRight correctly", () => {
+      const spy = vi.spyOn(gameboard, "moveRight");
+
+      useBoardStore.getState().moveRight();
+      const state = useBoardStore.getState();
+      const movedRight = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 2, 4],
+        [0, 0, 0, 8],
+      ];
+
+      expect(state.boards[0]).toEqual(movedRight);
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it.each(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"] as const)(
+      "handles move by $s arrow key",
+      (moveKey) => {
+        const spyMoveUp = vi.spyOn(gameboard.movements, "ArrowUp");
+        const spyMoveDown = vi.spyOn(gameboard.movements, "ArrowDown");
+        const spyMoveLeft = vi.spyOn(gameboard.movements, "ArrowLeft");
+        const spyMoveRight = vi.spyOn(gameboard.movements, "ArrowRight");
+        const state = useBoardStore.getState();
+        const spyMove = vi.spyOn(state, "move");
+
+        state.move(moveKey);
+
+        expect(spyMove).toHaveBeenCalled();
+
+        switch (moveKey) {
+          case "ArrowUp":
+            expect(spyMoveUp).toHaveBeenCalledAfter(spyMove);
+            break;
+          case "ArrowDown":
+            expect(spyMoveDown).toHaveBeenCalledAfter(spyMove);
+            break;
+          case "ArrowLeft":
+            expect(spyMoveLeft).toHaveBeenCalledAfter(spyMove);
+            break;
+          case "ArrowRight":
+            expect(spyMoveRight).toHaveBeenCalledAfter(spyMove);
+            break;
+        }
+      },
+    );
+
+    it.each([
+      "Enter",
+      "Escape",
+      "Tab",
+      " ",
+      "Backspace",
+      "Delete",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown",
+      "Insert",
+      "a",
+      "A",
+      "1",
+      "!",
+      "ShiftLeft",
+      "ControlLeft",
+      "AltLeft",
+      "MetaLeft",
+      "F1",
+      "F12",
+    ] as const)(
+      "does not trigger any movement for incorrect key $s",
+      (invalidKey) => {
+        const spyMoveUp = vi.spyOn(gameboard.movements, "ArrowUp");
+        const spyMoveDown = vi.spyOn(gameboard.movements, "ArrowDown");
+        const spyMoveLeft = vi.spyOn(gameboard.movements, "ArrowLeft");
+        const spyMoveRight = vi.spyOn(gameboard.movements, "ArrowRight");
+
+        const state = useBoardStore.getState();
+        const spyMove = vi.spyOn(state, "move");
+
+        // @ts-expect-error - intentionally passing invalid key to test runtime behavior
+        state.move(invalidKey);
+
+        expect(spyMove).toHaveBeenCalled();
+
+        expect(spyMoveUp).not.toHaveBeenCalled();
+        expect(spyMoveDown).not.toHaveBeenCalled();
+        expect(spyMoveLeft).not.toHaveBeenCalled();
+        expect(spyMoveRight).not.toHaveBeenCalled();
+      },
+    );
+  });
 
   describe("Add new number to board", () => {
     it("adds new number to board", () => {

@@ -79,6 +79,11 @@ describe("EmptyBlocks", () => {
 
       expect(emptyBlocks(input)).toStrictEqual(expected);
     });
+
+    it("throws an error if undefined was passed as board", () => {
+      // @ts-expect-error undefined can maybe passed at runtime
+      expect(() => emptyBlocks(undefined)).toThrow("Board can't be undefined.");
+    });
   });
 
   describe("emptyBlocks - 4x4 boards", () => {

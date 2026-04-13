@@ -44,9 +44,21 @@ export const useBoardStore = create<IUseBoardStore>((set) => ({
       boards: pushIfNotEqualsTop(curState.boards, moveDown(curState.boards[0])),
     })),
   addNew: () =>
-    set((curState) => ({
-      boards: [addNewNumberToBoard(curState.boards[0]), ...curState.boards],
-    })),
+    set((curState) => {
+      console.log("useBoardStore:addNew: ", curState.boards);
+
+      try {
+        const newBoard = addNewNumberToBoard(curState.boards[0]);
+
+        return {
+          boards: [newBoard, ...curState.boards],
+        };
+      } catch (err) {
+        console.log(err);
+      }
+
+      return curState;
+    }),
   move: (move) => {
     if (movements[move]) {
       set((curState) => ({

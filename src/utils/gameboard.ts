@@ -27,6 +27,10 @@ function newNumber(): number {
 export function emptyBlocks(board: Board): Pair[] {
   const arr: Pair[] = [];
 
+  if (board === undefined) {
+    throw new Error("Board can't be undefined.");
+  }
+
   board.forEach((row, rowIdx) => {
     row.forEach((e, eIdx) => {
       if (e === 0) {

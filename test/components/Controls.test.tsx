@@ -15,9 +15,21 @@ const initialBoard = [
   [4, 0, 0, 4],
 ];
 
-vi.mock("../utils/gameboard", () => ({
-  createBoard: vi.fn(() => [initialBoard]),
-}));
+// Mock the utilities
+vi.mock("../../src/utils/gameboard", async (realGameboard) => {
+  const actual =
+    await realGameboard<typeof import("../../src/utils/gameboard")>();
+
+  return {
+    ...actual,
+    createBoard: vi.fn(() => [
+      [0, 0, 0, 0],
+      [0, 2, 0, 0],
+      [0, 0, 2, 4],
+      [4, 0, 0, 4],
+    ]),
+  };
+});
 
 describe("Controls", () => {
   beforeEach(() => {

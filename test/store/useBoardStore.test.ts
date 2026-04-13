@@ -244,4 +244,41 @@ describe("useBoardStore", () => {
       expect(m).toBe(n);
     });
   });
+
+  describe("undoing", () => {
+    it("does not undo when there is only one single board in history", () => {
+      const state = useBoardStore.getState();
+      state.undo();
+      const newState = useBoardStore.getState();
+
+      expect(newState.boards).toStrictEqual(state.boards);
+    });
+
+    it("does undo when there is more than one board in hishtory", () => {
+      const prev = [
+        [0, 0, 0, 0],
+        [0, 2, 0, 0],
+        [0, 0, 2, 4],
+        [4, 0, 0, 4],
+      ];
+      const cur = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 2, 4],
+        [0, 0, 0, 8],
+      ];
+
+      useBoardStore.setState({
+        boards: [cur, prev],
+      });
+
+      const state = useBoardStore.getState();
+
+      state.undo();
+
+      const newState = useBoardStore.getState();
+
+      expect(newState.boards).toStrictEqual([prev]);
+    });
+  });
 });

@@ -8,7 +8,7 @@ import {
   moveRight,
   moveUp,
 } from "../utils/gameboard";
-import { pushIfNotEqualsTop } from "../utils/helpers";
+import { ndArrCmp } from "../utils/helpers";
 import { Board } from "../utils/types";
 
 interface IUseBoardStore {
@@ -25,24 +25,69 @@ interface IUseBoardStore {
 export const useBoardStore = create<IUseBoardStore>((set) => ({
   boards: [createBoard()],
   moveLeft: () =>
-    set((curState) => ({
-      boards: pushIfNotEqualsTop(curState.boards, moveLeft(curState.boards[0])),
-    })),
+    set((curState) => {
+      const hist = curState.boards;
+      const top = hist[0];
+      const newBoard = moveLeft(top);
+      const haveChanged = !ndArrCmp(top, newBoard);
+
+      if (haveChanged) {
+        const newBoarWithNewNumber = addNewNumberToBoard(newBoard);
+
+        return {
+          boards: [newBoarWithNewNumber, ...hist],
+        };
+      }
+      return curState;
+    }),
   moveRight: () =>
-    set((curState) => ({
-      boards: pushIfNotEqualsTop(
-        curState.boards,
-        moveRight(curState.boards[0]),
-      ),
-    })),
+    set((curState) => {
+      const hist = curState.boards;
+      const top = hist[0];
+      const newBoard = moveRight(top);
+      const haveChanged = !ndArrCmp(top, newBoard);
+
+      if (haveChanged) {
+        const newBoarWithNewNumber = addNewNumberToBoard(newBoard);
+
+        return {
+          boards: [newBoarWithNewNumber, ...hist],
+        };
+      }
+      return curState;
+    }),
   moveUp: () =>
-    set((curState) => ({
-      boards: pushIfNotEqualsTop(curState.boards, moveUp(curState.boards[0])),
-    })),
+    set((curState) => {
+      const hist = curState.boards;
+      const top = hist[0];
+      const newBoard = moveUp(top);
+      const haveChanged = !ndArrCmp(top, newBoard);
+
+      if (haveChanged) {
+        const newBoarWithNewNumber = addNewNumberToBoard(newBoard);
+
+        return {
+          boards: [newBoarWithNewNumber, ...hist],
+        };
+      }
+      return curState;
+    }),
   moveDown: () =>
-    set((curState) => ({
-      boards: pushIfNotEqualsTop(curState.boards, moveDown(curState.boards[0])),
-    })),
+    set((curState) => {
+      const hist = curState.boards;
+      const top = hist[0];
+      const newBoard = moveDown(top);
+      const haveChanged = !ndArrCmp(top, newBoard);
+
+      if (haveChanged) {
+        const newBoarWithNewNumber = addNewNumberToBoard(newBoard);
+
+        return {
+          boards: [newBoarWithNewNumber, ...hist],
+        };
+      }
+      return curState;
+    }),
   addNew: () =>
     set((curState) => {
       console.log("useBoardStore:addNew: ", curState.boards);
@@ -60,13 +105,22 @@ export const useBoardStore = create<IUseBoardStore>((set) => ({
       return curState;
     }),
   move: (move) => {
-    if (movements[move]) {
-      set((curState) => ({
-        boards: pushIfNotEqualsTop(
-          curState.boards,
-          movements[move](curState.boards[0]),
-        ),
-      }));
+    if (move in movements) {
+      set((curState) => {
+        const hist = curState.boards;
+        const top = hist[0];
+        const newBoard = movements[move](top);
+        const haveChanged = !ndArrCmp(top, newBoard);
+
+        if (haveChanged) {
+          const newBoarWithNewNumber = addNewNumberToBoard(newBoard);
+
+          return {
+            boards: [newBoarWithNewNumber, ...hist],
+          };
+        }
+        return curState;
+      });
     }
   },
   undo: () =>

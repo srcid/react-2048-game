@@ -8,13 +8,6 @@ import Controls from "../../src/components/Controls";
 import { useBoardStore } from "../../src/store/useBoardStore";
 import * as gameboard from "../../src/utils/gameboard";
 
-const initialBoard = [
-  [0, 0, 0, 0],
-  [0, 2, 0, 0],
-  [0, 0, 2, 4],
-  [4, 0, 0, 4],
-];
-
 // Mock the utilities
 vi.mock("../../src/utils/gameboard", async (realGameboard) => {
   const actual =
@@ -30,6 +23,13 @@ vi.mock("../../src/utils/gameboard", async (realGameboard) => {
     ]),
   };
 });
+
+const initialBoard = [
+  [0, 0, 0, 0],
+  [0, 2, 0, 0],
+  [0, 0, 2, 4],
+  [4, 0, 0, 4],
+];
 
 describe("Controls", () => {
   beforeEach(() => {

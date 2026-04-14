@@ -39,87 +39,102 @@ describe("Controls", () => {
     cleanup();
   });
 
-  it("swipes the up", () => {
-    const { container } = render(<Controls id="test-ctrl"></Controls>);
-    const btnUp = container.querySelector("#test-ctrl-btn-up");
+  describe("Movement buttons", () => {
+    beforeAll(() => {
+      const spyAddNewNumberToBoard = vi.spyOn(gameboard, "addNewNumberToBoard");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      spyAddNewNumberToBoard.mockImplementation((board, pos, val) => board);
 
-    expect(btnUp).not.toBeNull(); // the id do exists
+      return () => {
+        spyAddNewNumberToBoard.mockReset();
+      };
+    });
 
-    fireEvent.click(btnUp as Element);
+    it("swipes the up", () => {
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnUp = container.querySelector("#test-ctrl-btn-up");
 
-    const state = useBoardStore.getState();
-    const expectedTopBoard = [
-      [4, 2, 2, 8],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ];
+      expect(btnUp).not.toBeNull(); // the id do exists
 
-    expect(state.boards.length).toStrictEqual(2);
-    expect(state.boards[0]).toStrictEqual(expectedTopBoard);
-    expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+      fireEvent.click(btnUp as Element);
+
+      const state = useBoardStore.getState();
+      const expectedTopBoard = [
+        [4, 2, 2, 8],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ];
+
+      expect(state.boards.length).toStrictEqual(2);
+      expect(state.boards[0]).toStrictEqual(expectedTopBoard);
+      expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+    });
+
+    it("swipes the down", () => {
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnDown = container.querySelector("#test-ctrl-btn-down");
+
+      expect(btnDown).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnDown as Element);
+
+      const state = useBoardStore.getState();
+      const expectedTopBoard = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [4, 2, 2, 8],
+      ];
+
+      expect(state.boards.length).toStrictEqual(2);
+      expect(state.boards[0]).toStrictEqual(expectedTopBoard);
+      expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+    });
+    it("swipes the left", () => {
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnLeft = container.querySelector("#test-ctrl-btn-left");
+
+      expect(btnLeft).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnLeft as Element);
+
+      const state = useBoardStore.getState();
+      const expectedTopBoard = [
+        [0, 0, 0, 0],
+        [2, 0, 0, 0],
+        [2, 4, 0, 0],
+        [8, 0, 0, 0],
+      ];
+
+      expect(state.boards.length).toStrictEqual(2);
+      expect(state.boards[0]).toStrictEqual(expectedTopBoard);
+      expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+    });
+    it("swipes the right", () => {
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnRight = container.querySelector("#test-ctrl-btn-right");
+
+      expect(btnRight).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnRight as Element);
+
+      const state = useBoardStore.getState();
+      const expectedTopBoard = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 2, 4],
+        [0, 0, 0, 8],
+      ];
+
+      expect(state.boards.length).toStrictEqual(2);
+      expect(state.boards[0]).toStrictEqual(expectedTopBoard);
+      expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+    });
   });
 
-  it("swipes the down", () => {
-    const { container } = render(<Controls id="test-ctrl"></Controls>);
-    const btnDown = container.querySelector("#test-ctrl-btn-down");
-
-    expect(btnDown).not.toBeNull(); // the id do exists
-
-    fireEvent.click(btnDown as Element);
-
-    const state = useBoardStore.getState();
-    const expectedTopBoard = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [4, 2, 2, 8],
-    ];
-
-    expect(state.boards.length).toStrictEqual(2);
-    expect(state.boards[0]).toStrictEqual(expectedTopBoard);
-    expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+  describe("Action buttons", () => {
+    it.todo("adds new number to board");
+    it.todo("retores to previus state of the game");
   });
-  it("swipes the left", () => {
-    const { container } = render(<Controls id="test-ctrl"></Controls>);
-    const btnLeft = container.querySelector("#test-ctrl-btn-left");
-
-    expect(btnLeft).not.toBeNull(); // the id do exists
-
-    fireEvent.click(btnLeft as Element);
-
-    const state = useBoardStore.getState();
-    const expectedTopBoard = [
-      [0, 0, 0, 0],
-      [2, 0, 0, 0],
-      [2, 4, 0, 0],
-      [8, 0, 0, 0],
-    ];
-
-    expect(state.boards.length).toStrictEqual(2);
-    expect(state.boards[0]).toStrictEqual(expectedTopBoard);
-    expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
-  });
-  it("swipes the right", () => {
-    const { container } = render(<Controls id="test-ctrl"></Controls>);
-    const btnRight = container.querySelector("#test-ctrl-btn-right");
-
-    expect(btnRight).not.toBeNull(); // the id do exists
-
-    fireEvent.click(btnRight as Element);
-
-    const state = useBoardStore.getState();
-    const expectedTopBoard = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 2],
-      [0, 0, 2, 4],
-      [0, 0, 0, 8],
-    ];
-
-    expect(state.boards.length).toStrictEqual(2);
-    expect(state.boards[0]).toStrictEqual(expectedTopBoard);
-    expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
-  });
-  it.todo("adds new number to board");
-  it.todo("retores to previus state of the game");
 });

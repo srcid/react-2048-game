@@ -38,6 +38,16 @@ describe("useBoardStore", () => {
   });
 
   describe("movements", () => {
+    beforeAll(() => {
+      const spyAddNewNumberToBoard = vi.spyOn(gameboard, "addNewNumberToBoard");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      spyAddNewNumberToBoard.mockImplementation((board, pos, val) => board);
+
+      return () => {
+        spyAddNewNumberToBoard.mockReset();
+      };
+    });
+
     it("should handle moveDown correctly", () => {
       const spy = vi.spyOn(gameboard, "moveDown");
 

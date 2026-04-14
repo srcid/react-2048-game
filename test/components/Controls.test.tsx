@@ -133,8 +133,49 @@ describe("Controls", () => {
     });
   });
 
-  describe("Action buttons", () => {
-    it.todo("adds new number to board");
-    it.todo("retores to previus state of the game");
+  describe("Undoing button", () => {
+    it("does not retore to previus state of the game when there is only one board in history", () => {
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnUndo = container.querySelector("#test-ctrl-btn-undo");
+
+      expect(btnUndo).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnUndo as Element);
+
+      const state = useBoardStore.getState();
+
+      expect(state.boards.length).toStrictEqual(1); // shouldn't undo when there is only one board in histoty
+      expect(state.boards[0]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+    });
+
+    it("retores to previus state of the game when there is more than one board in history", () => {
+      const secondBoard = [
+        [2, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 2, 4],
+        [0, 0, 0, 8],
+      ];
+
+      useBoardStore.setState({
+        boards: [secondBoard, initialBoard],
+      });
+
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnUndo = container.querySelector("#test-ctrl-btn-undo");
+
+      const oldState = useBoardStore.getState();
+      expect(oldState.boards.length).toStrictEqual(2);
+      expect(oldState.boards[0]).toStrictEqual(secondBoard);
+      expect(oldState.boards[1]).toStrictEqual(initialBoard);
+
+      expect(btnUndo).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnUndo as Element);
+
+      const newState = useBoardStore.getState();
+
+      expect(newState.boards.length).toStrictEqual(1);
+      expect(newState.boards[0]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+    });
   });
 });

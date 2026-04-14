@@ -178,4 +178,31 @@ describe("Controls", () => {
       expect(newState.boards[0]).toStrictEqual(initialBoard); // initial board shouldn't be changed
     });
   });
+
+  describe("Add new number button", () => {
+    it("adds new number to board", () => {
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnAddNew = container.querySelector("#test-ctrl-btn-addnew");
+
+      expect(btnAddNew).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnAddNew as Element);
+
+      const state = useBoardStore.getState();
+
+      const n = initialBoard.reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      const m = state.boards[0].reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      expect(state.boards.length).toStrictEqual(2);
+      expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+      expect(n + 1).toStrictEqual(m);
+    });
+  });
 });

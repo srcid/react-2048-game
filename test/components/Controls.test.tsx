@@ -43,7 +43,7 @@ describe("Controls", () => {
     beforeAll(() => {
       const spyAddNewNumberToBoard = vi.spyOn(gameboard, "addNewNumberToBoard");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      spyAddNewNumberToBoard.mockImplementation((board, pos, val) => board);
+      spyAddNewNumberToBoard.mockImplementation((board, _pos, _val) => board);
 
       return () => {
         spyAddNewNumberToBoard.mockReset();

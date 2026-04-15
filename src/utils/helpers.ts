@@ -1,4 +1,4 @@
-import { Board, NDArray } from "./types";
+import { Board, NDArray, Pair } from "./types";
 
 /**
  * Recursively compares two N-dimensional arrays for deep equality.
@@ -35,4 +35,37 @@ export function pushIfNotEqualsTop(boards: Board[], newBoard: Board) {
   }
 
   return boards;
+}
+
+/**
+ * 80% of returing 2 and 20% of returing 4
+ *
+ * @returns 2 or 4
+ */
+export function newNumber(): number {
+  return Math.random() <= 0.8 ? 2 : 4;
+}
+
+/**
+ * Return the empty blocks of the given board
+ *
+ * @param board
+ * @returns Pair of indexes i,j which contains 0
+ */
+export function emptyBlocks(board: Board): Pair[] {
+  const arr: Pair[] = [];
+
+  if (board === undefined) {
+    throw new Error("Board can't be undefined.");
+  }
+
+  board.forEach((row, rowIdx) => {
+    row.forEach((e, eIdx) => {
+      if (e === 0) {
+        arr.push([rowIdx, eIdx]);
+      }
+    });
+  });
+
+  return arr;
 }

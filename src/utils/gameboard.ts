@@ -1,5 +1,6 @@
 import "./extensions";
 import { pipe } from "./functional";
+import { emptyBlocks, newNumber } from "./helpers";
 import { Board, Pair } from "./types";
 
 export function createBoard(): Board {
@@ -7,39 +8,6 @@ export function createBoard(): Board {
   board = pipe(addNewNumberToBoard, addNewNumberToBoard)(board);
 
   return board;
-}
-
-/**
- * 80% of returing 2 and 20% of returing 4
- *
- * @returns 2 or 4
- */
-function newNumber(): number {
-  return Math.random() <= 0.8 ? 2 : 4;
-}
-
-/**
- * Return the empty blocks of the given board
- *
- * @param board
- * @returns Pair of indexes i,j which contains 0
- */
-export function emptyBlocks(board: Board): Pair[] {
-  const arr: Pair[] = [];
-
-  if (board === undefined) {
-    throw new Error("Board can't be undefined.");
-  }
-
-  board.forEach((row, rowIdx) => {
-    row.forEach((e, eIdx) => {
-      if (e === 0) {
-        arr.push([rowIdx, eIdx]);
-      }
-    });
-  });
-
-  return arr;
 }
 
 export function addNewNumberToBoard(
@@ -56,7 +24,6 @@ export function addNewNumberToBoard(
   const emptiesBlocksRandomIdx = Math.floor(
     Math.random() * emptiesBlocks.length,
   );
-
   const [i, j] = pos ?? emptiesBlocks[emptiesBlocksRandomIdx];
   const x = val ?? newNumber();
 

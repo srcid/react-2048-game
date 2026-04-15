@@ -7,22 +7,18 @@ import { cleanup, fireEvent, render } from "@testing-library/react";
 import Controls from "../../src/components/Controls";
 import { useBoardStore } from "../../src/store/useBoardStore";
 import * as gameboard from "../../src/utils/gameboard";
+import * as helpers from "../../src/utils/helpers";
 
 // Mock the utilities
-vi.mock("../../src/utils/gameboard", async (realGameboard) => {
-  const actual =
-    await realGameboard<typeof import("../../src/utils/gameboard")>();
+vi.mock("../../src/utils/helpers", { spy: true });
+vi.mock("../../src/utils/gameboard", { spy: true });
 
-  return {
-    ...actual,
-    createBoard: vi.fn(() => [
-      [0, 0, 0, 0],
-      [0, 2, 0, 0],
-      [0, 0, 2, 4],
-      [4, 0, 0, 4],
-    ]),
-  };
-});
+vi.mocked(gameboard.createBoard).mockImplementation(() => [
+  [0, 0, 0, 0],
+  [0, 2, 0, 0],
+  [0, 0, 2, 4],
+  [4, 0, 0, 4],
+]);
 
 const initialBoard = [
   [0, 0, 0, 0],
@@ -203,6 +199,35 @@ describe("Controls", () => {
       expect(state.boards.length).toStrictEqual(2);
       expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
       expect(n + 1).toStrictEqual(m);
+    });
+
+    it("adds new number to board mocked", () => {
+      vi.mocked(helpers.emptyBlocks).mockReturnValueOnce([[0, 0]]);
+      vi.mocked(helpers.newNumber).mockReturnValueOnce(2);
+
+      const { container } = render(<Controls id="test-ctrl"></Controls>);
+      const btnAddNew = container.querySelector("#test-ctrl-btn-addnew");
+
+      expect(btnAddNew).not.toBeNull(); // the id do exists
+
+      fireEvent.click(btnAddNew as Element);
+
+      const state = useBoardStore.getState();
+
+      const n = initialBoard.reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      const m = state.boards[0].reduce(
+        (acc, curRow) => acc + curRow.filter((e) => e !== 0).length,
+        0,
+      );
+
+      expect(state.boards.length).toStrictEqual(2);
+      expect(state.boards[1]).toStrictEqual(initialBoard); // initial board shouldn't be changed
+      expect(n + 1).toStrictEqual(m);
+      expect(state.boards[0][0][0]).toStrictEqual(2);
     });
   });
 });

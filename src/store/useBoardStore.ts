@@ -90,8 +90,6 @@ export const useBoardStore = create<IUseBoardStore>((set) => ({
     }),
   addNew: () =>
     set((curState) => {
-      console.log("useBoardStore:addNew: ", curState.boards);
-
       try {
         const newBoard = addNewNumberToBoard(curState.boards[0]);
 

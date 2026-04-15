@@ -1,4 +1,9 @@
-import { ndArrCmp, pushIfNotEqualsTop } from "../../src/utils/helpers";
+import {
+  emptyBlocks,
+  ndArrCmp,
+  newNumber,
+  pushIfNotEqualsTop,
+} from "../../src/utils/helpers";
 import { Board } from "../../src/utils/types";
 
 describe("ndArrCmp", () => {
@@ -93,5 +98,207 @@ describe("pushIfNotEqualsTop", () => {
     // In the current implementation, this might throw an error
     // because ndArrCmp(boards[0], newBoard) will pass undefined to .length
     expect(() => pushIfNotEqualsTop(history, boardA)).toThrow();
+  });
+});
+
+describe("newNumber", () => {
+  it.each([0.1, 0.5, 0.7, 0.79, 0.8])(
+    "returns 2 if math.random return less then or equals 0.8",
+    (random) => {
+      const mathRandomMock = vi.spyOn(Math, "random");
+      mathRandomMock.mockReturnValue(random);
+
+      const n = newNumber();
+
+      expect(n).toStrictEqual(2);
+    },
+  );
+
+  it.each([0.8001, 0.81, 0.9, 0.99, 1])(
+    "returns 4 if math.random return more than 0.8",
+    (random) => {
+      const mathRandomMock = vi.spyOn(Math, "random");
+      mathRandomMock.mockReturnValue(random);
+
+      const n = newNumber();
+
+      expect(n).toStrictEqual(4);
+    },
+  );
+});
+
+describe("EmptyBlocks", () => {
+  describe("Generic matrices dimentions", () => {
+    it("returns all coordinates containing 0 in a mixed board", () => {
+      const board: Board = [
+        [1, 0, 3],
+        [0, 5, 6],
+        [7, 8, 0],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 1],
+        [1, 0],
+        [2, 2],
+      ]);
+    });
+
+    it("returns empty array when there are no empty blocks", () => {
+      const board: Board = [
+        [1, 2],
+        [3, 4],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([]);
+    });
+
+    it("returns all positions when board is entirely empty", () => {
+      const board: Board = [
+        [0, 0],
+        [0, 0],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 0],
+        [0, 1],
+        [1, 0],
+        [1, 1],
+      ]);
+    });
+
+    it("returns empty array for an empty board", () => {
+      const board: Board = [];
+
+      expect(emptyBlocks(board)).toEqual([]);
+    });
+
+    it("handles single-row boards correctly", () => {
+      const board: Board = [[0, 1, 0, 2]];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 0],
+        [0, 2],
+      ]);
+    });
+
+    it("handles single-column boards correctly", () => {
+      const board: Board = [[0], [1], [0]];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 0],
+        [2, 0],
+      ]);
+    });
+
+    it("returns an empty board when given an empty board", () => {
+      const input: Board = [];
+      const expected: Board = [];
+
+      expect(emptyBlocks(input)).toStrictEqual(expected);
+    });
+
+    it("throws an error if undefined was passed as board", () => {
+      // @ts-expect-error undefined can maybe passed at runtime
+      expect(() => emptyBlocks(undefined)).toThrow("Board can't be undefined.");
+    });
+  });
+
+  describe("emptyBlocks - 4x4 boards", () => {
+    it("returns correct coordinates for most empty board", () => {
+      const input = [
+        [0, 0, 0, 0],
+        [0, 2, 0, 0],
+        [0, 0, 2, 4],
+        [4, 0, 0, 4],
+      ];
+
+      const expected = [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [1, 0],
+        [1, 2],
+        [1, 3],
+        [2, 0],
+        [2, 1],
+        [3, 1],
+        [3, 2],
+      ];
+
+      expect(emptyBlocks(input)).toStrictEqual(expected);
+    });
+
+    it("returns correct coordinates for mixed 4x4 board", () => {
+      const board: Board = [
+        [1, 0, 3, 4],
+        [0, 6, 7, 0],
+        [9, 10, 0, 12],
+        [13, 14, 15, 0],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 1],
+        [1, 0],
+        [1, 3],
+        [2, 2],
+        [3, 3],
+      ]);
+    });
+
+    it("returns empty array when no zeros exist", () => {
+      const board: Board = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [13, 14, 15, 16],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([]);
+    });
+
+    it("returns all positions when entire 4x4 board is empty", () => {
+      const board: Board = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 0],
+        [0, 1],
+        [0, 2],
+        [0, 3],
+        [1, 0],
+        [1, 1],
+        [1, 2],
+        [1, 3],
+        [2, 0],
+        [2, 1],
+        [2, 2],
+        [2, 3],
+        [3, 0],
+        [3, 1],
+        [3, 2],
+        [3, 3],
+      ]);
+    });
+
+    it("returns only corner zeros correctly", () => {
+      const board: Board = [
+        [0, 2, 3, 0],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [0, 14, 15, 0],
+      ];
+
+      expect(emptyBlocks(board)).toEqual([
+        [0, 0],
+        [0, 3],
+        [3, 0],
+        [3, 3],
+      ]);
+    });
   });
 });

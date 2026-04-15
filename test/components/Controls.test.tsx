@@ -37,12 +37,13 @@ describe("Controls", () => {
 
   describe("Movement buttons", () => {
     beforeAll(() => {
-      const spyAddNewNumberToBoard = vi.spyOn(gameboard, "addNewNumberToBoard");
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      spyAddNewNumberToBoard.mockImplementation((board, _pos, _val) => board);
+      vi.mocked(gameboard.addNewNumberToBoard).mockImplementation(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        (board, _pos, _val) => board,
+      );
 
       return () => {
-        spyAddNewNumberToBoard.mockReset();
+        vi.mocked(gameboard.addNewNumberToBoard).mockReset();
       };
     });
 

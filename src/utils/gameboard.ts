@@ -1,6 +1,6 @@
 import "./extensions";
 import { pipe } from "./functional";
-import { emptyBlocks, newNumber } from "./helpers";
+import { emptyBlocks, newNumber, slideAndMergeRowToLeft } from "./helpers";
 import { Board, Pair } from "./types";
 
 export function createBoard(): Board {
@@ -44,28 +44,6 @@ export function addNewNumberToBoard(
   }
 
   return board.with(i, board[i].with(j, x));
-}
-
-/**
- * slide non-zero elements to the left, and them together on the left, in pairs, that are next to each other.
- *
- * @param row
- * @returns slided and merged new row
- */
-export function slideAndMergeRowToLeft(row: number[]): number[] {
-  let filtered = row.filter((value) => value !== 0);
-
-  for (let i = 0; i < filtered.length - 1; i++) {
-    if (filtered[i] === filtered[i + 1]) {
-      filtered[i] *= 2;
-      filtered[i + 1] = 0;
-      i++;
-    }
-  }
-
-  filtered = filtered.filter((value) => value !== 0);
-
-  return [...filtered, ...Array(row.length - filtered.length).fill(0)];
 }
 
 export function moveLeft(board: Board): Board {

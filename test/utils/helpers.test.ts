@@ -107,7 +107,7 @@ describe("newNumber", () => {
     "returns 2 if math.random return less then or equals 0.8",
     (random) => {
       const mathRandomMock = vi.spyOn(Math, "random");
-      mathRandomMock.mockReturnValue(random);
+      mathRandomMock.mockReturnValueOnce(random);
 
       const n = newNumber();
 
@@ -119,13 +119,41 @@ describe("newNumber", () => {
     "returns 4 if math.random return more than 0.8",
     (random) => {
       const mathRandomMock = vi.spyOn(Math, "random");
-      mathRandomMock.mockReturnValue(random);
+      mathRandomMock.mockReturnValueOnce(random);
 
       const n = newNumber();
 
       expect(n).toStrictEqual(4);
     },
   );
+
+  test("returns about 80% of 2 and about of 20% 4", () => {
+    const N = 100_000;
+    const DELTA = 0.05;
+    const EXPECTED_DIST_OF_2 = 0.8;
+    const EXPECTED_DIST_OF_4 = 0.2;
+
+    let count2 = 0;
+    let count4 = 0;
+
+    for (let i = 0; i < N; i++) {
+      const value = newNumber();
+      if (value === 2) count2++;
+      else if (value === 4) count4++;
+    }
+
+    const ratio2 = count2 / N;
+    const ratio4 = count4 / N;
+
+    console.log("radio2: ", ratio2);
+    console.log("radio4: ", ratio4);
+
+    expect(ratio2).toBeGreaterThan(EXPECTED_DIST_OF_2 - DELTA);
+    expect(ratio2).toBeLessThan(EXPECTED_DIST_OF_2 + DELTA);
+
+    expect(ratio4).toBeGreaterThan(EXPECTED_DIST_OF_4 - DELTA);
+    expect(ratio4).toBeLessThan(EXPECTED_DIST_OF_4 + DELTA);
+  });
 });
 
 describe("EmptyBlocks", () => {

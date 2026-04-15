@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@layer components {
+  .link {
+    @apply text-blue-600  visited:text-purple-600 hover:text-blue-800 hover:underline;
+  }
+}

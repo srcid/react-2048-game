@@ -1,9 +1,10 @@
-import Block from "./Block";
 import { clsx } from "clsx";
-import { useBoardStore } from "../store/useBoardStore";
-import Controls from "./Controls";
-import { movements } from "../utils/gameboard";
 import { useEffect } from "react";
+import { useBoardStore } from "../store/useBoardStore";
+import { movements } from "../utils/gameboard";
+import Block from "./Block";
+import Controls from "./Controls";
+import FooterBar from "./FooterBar";
 
 function App() {
   const boardState = useBoardStore((state) => state);
@@ -24,8 +25,8 @@ function App() {
   }, [boardState]);
 
   return (
-    <div className="bg-amber-100">
-      <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col min-h-screen">
+      <div className="flex flex-1 flex-col items-center justify-center">
         <section className="flex flex-row gap-5 mb-5 w-full justify-center">
           <div className="bg-stone-200 py-2 flex flex-col items-center rounded-2xl min-w-[6rem]">
             <span>Score</span>
@@ -65,6 +66,7 @@ function App() {
         </div>
         <Controls />
       </div>
+      <FooterBar />
     </div>
   );
 }
